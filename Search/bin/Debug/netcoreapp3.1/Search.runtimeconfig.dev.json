@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Hoda\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Hoda\\.nuget\\packages"
+    ]
+  }
+}

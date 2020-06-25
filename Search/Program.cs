@@ -1,26 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Search.Models.Elasticsearch;
 
 namespace Search
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			CreateHostBuilder(args).Build().Run();
-		}
+    public class Program
+    {
+        // make sure your program is running C# 7.1 or later
+        public static async Task Main(string[] args)
+        {
+            // setup host
+            var host = CreateWebHostBuilder(args).Build();
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-			Host.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
-	}
+            // load records from Csv to Elasticsearch
+            using (var scope = host.Services.CreateScope())
+            {
+                var loader = scope.ServiceProvider.GetRequiredService<CapitalCities>();
+                await loader.RunAsync();
+            }
+
+            // change our run to async
+            await host.RunAsync();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+    }
 }

@@ -4,6 +4,8 @@ namespace Search.Models.Csv
 {
     public class CapitalCitiesMapping : ClassMap<CapitalCityRecord>
     {
+
+
         public CapitalCitiesMapping()
         {
             Map(x => x.Id).Name("id");
